@@ -1,16 +1,12 @@
 import numpy
-import spacy
 
 
 class Similarity:
-
-    def __init__(self, labels, boost=5, threshold=0.7, model_name='en'):
-        print("Loading model...")
-        self.nlp = spacy.load(model_name)
-        print("Model loaded!")
-        self.labelDoc = self.nlp(labels)
+    def __init__(self, nlp, labels, boost=5, threshold=0.7):
+        self.labelDoc = nlp(labels)
         self.boost = boost
         self.threshold = threshold
+        self.nlp = nlp
 
     def map_tokens(self, token):
         return [token.similarity(label) for label in self.labelDoc]
@@ -31,3 +27,8 @@ class Similarity:
 
         winner_index = numpy.argmax(likeness)
         return self.labelDoc[winner_index].text
+
+    def detect_entities(self, text):
+        doc = self.nlp(text)
+        print(doc.ents[0], doc.ents[0].label_)
+        # print(doc.ents[0])

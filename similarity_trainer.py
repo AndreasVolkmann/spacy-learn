@@ -12,7 +12,7 @@ class SimilarityTrainer:
         else:
             self.size = size
 
-    def train(self):
+    def calculate_similarity(self):
         correct_guesses = 0
         misinterpretations = []
         size = self.size
@@ -31,3 +31,8 @@ class SimilarityTrainer:
                 # print(mis)
                 misinterpretations.append(mis)
         return misinterpretations, correct_guesses
+
+    def detect_entities(self):
+        for i in range(0, self.size):
+            text = self.rows[i]
+            self.sim.detect_entities(text)

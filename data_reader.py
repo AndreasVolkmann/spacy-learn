@@ -1,7 +1,9 @@
 import csv
 
+fullPath = 'D:\Dev\Java\clinical-trials\\trials_combined_text.psv'
 
-def read(path, delimiter='|', encoding='utf-8'):
+
+def read(path=fullPath, delimiter='|', encoding='utf-8'):
     correct_labels = []
     text_rows = []
     with open(path, encoding=encoding) as csvfile:

@@ -1,22 +1,27 @@
 from collections import defaultdict
 
 from data_reader import read
+from nlp_model import initialize_model
 from similarity import Similarity
 from similarity_trainer import SimilarityTrainer
 
 # path = 'data.psv'
 path = 'D:\Dev\Java\clinical-trials\\trials_combined_text.psv'
-maxRecords = 100
+maxRecords = 120
 
 correctLabels, textRows = read(path, '|')
 
 labels = sorted(set(correctLabels))
 labelString = ' '.join(labels)
 
-sim = Similarity(labelString, boost=5, threshold=0.7, model_name='en_core_web_lg')
+#en_core_web_lg
+nlp = initialize_model('en')
+similarity = Similarity(nlp, labelString, boost=5, threshold=0.7)
 size = min(len(correctLabels), maxRecords)
-trainer = SimilarityTrainer(correctLabels, textRows, sim, size)
-misinterpretations, correctGuesses = trainer.train()
+trainer = SimilarityTrainer(correctLabels, textRows, similarity, size)
+#trainer.detect_entities()
+
+misinterpretations, correctGuesses = trainer.calculate_similarity()
 
 print("Correct Guesses", correctGuesses, correctGuesses / size * 100)
 
